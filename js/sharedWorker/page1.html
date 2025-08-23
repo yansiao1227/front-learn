@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Page 1</title>
+</head>
+<body>
+  <h1>Page 1</h1>
+  <input id="msg" placeholder="输入要发送的消息">
+  <button id="send">发送</button>
+
+  <script>
+    // 连接 SharedWorker
+    const worker = new SharedWorker("worker.js");
+
+    // 监听消息
+    worker.port.onmessage = (e) => {
+      console.log("Page1 收到:", e.data);
+      alert("Page1 收到: " + e.data);
+    };
+
+    // 发送消息
+    document.getElementById("send").onclick = () => {
+      const msg = document.getElementById("msg").value;
+      worker.port.postMessage("来自 Page1 的消息: " + msg);
+    };
+
+    // 启动通信
+    worker.port.start();
+  </script>
+</body>
+</html>
